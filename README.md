@@ -1,5 +1,3 @@
-[![HonkBot](/images/logo.png?raw=true)](https://honkhonk.io)
-
 # Honk Tip Bot
 
 ## About
