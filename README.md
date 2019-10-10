@@ -23,7 +23,7 @@ This bot powered with Telegraf liabrary.
 
 1. Clone this repo:
     ```bash
-    git clone https://github.com/
+    git clone https://github.com/KeithPatrick5/honktipbot
     ```
 
 2. Create AWS DynamoDB tables: 
