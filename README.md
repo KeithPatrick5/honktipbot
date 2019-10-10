@@ -45,4 +45,4 @@ This bot powered with Telegraf liabrary.
     ```
 
 
-Creator: https://github.com/baumanka
+Creator: https://github.com/pytour
