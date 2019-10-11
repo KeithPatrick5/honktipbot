@@ -16,7 +16,8 @@ bot.use(commandParts());
 bot.use(async (ctx, next) => {
   // Logger
   console.log("**********");
-  if (ctx.updateSubTypes[0] === 'text') console.log(`text:${ctx.message.text}\nfrom ${ctx.from.id}`);
+  if (ctx.from.is_bot) return ctx.reply('Only humans accepted.');
+  // if (ctx.updateSubTypes[0] === 'text') console.log(`text:${ctx.message.text}\nfrom ${ctx.from.id}`);
   await next();
 });
 

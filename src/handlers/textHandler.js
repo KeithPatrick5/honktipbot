@@ -84,11 +84,14 @@ const tip = async (ctx, amount) => {
   console.log("toUser ", toUser);
   await sessionInit(ctx);
 
+  // Tip to bot deprecated
+  if (toUser.is_bot) return `*${fromUser.first_name}* you can't tip to bot`;
+
   const transactionSuccess = await transactionInit(amount, ctx, toUser);
 
   let msg = "";
   if (transactionSuccess) {
-    msg += `*${fromUser.first_name}* tipped ${amount} 🤡*HONK*🤡 to *${toUser.first_name}*`;
+    msg += `*${fromUser.first_name}* tipped ${amount.toLocaleString('en-US')} 🤡*HONK*🤡 to *${toUser.first_name}*`;
   } else {
     console.log("Need more HONK");
     msg += `*${fromUser.first_name}* you need more 🤡*HONK*🤡`;

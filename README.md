@@ -9,7 +9,7 @@ Then make your tip to other user by replying on their messages with "[NUMBER] ho
 Users can deposit and withdraw their tokens.
 You could also setup notification for new deposits with separate service *checkDeposits*.
 
-This bot powered with Telegraf liabrary.
+This bot powered with Telegraf library.
 
 ### Supported commands:
 
