@@ -30,16 +30,11 @@ module.exports.commandHandler = bot => {
   bot.command("withdraw", async ctx => {
     await isAllowed(ctx, withdraw);
   });
-
-  bot.command(["checkDeposits", "checkdeposits"], ctx => {
-    // DEPRECATED
-    // Decided to use socket on AWS EC2 to get deposits instantly
-    //isAllowed(ctx, checkDeposits);
-  });
 };
 
 const isAllowed = async (ctx, commandFunction) => {
   if (ctx.chat.type == "private") {
+    if (ctx.from.is_bot) return ctx.reply('Only humans accepted.');
     if (!ctx.session.wallet) await sessionInit(ctx);
     await commandFunction(ctx)
   }
