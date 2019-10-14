@@ -2,7 +2,10 @@ const { checkSLPAddress } = require("../../slp/checkSLPAddress");
 const { sendToken } = require("../../slp/send-token");
 const { getSession, saveSession } = require("../../dynamoDB");
 // const { getBalance } = require("../../slpdb/getBalance");
-const { checkEscrowBalance, withdrawCounter } = require("../../checkEscrowBalance");
+const {
+  checkEscrowBalance,
+  withdrawCounter
+} = require("../../checkEscrowBalance");
 const admin = require("../../admin");
 
 module.exports.withdraw = async ctx => {
@@ -82,7 +85,7 @@ const withdrawTokens = async (session, amount, destSLPaddr) => {
   await saveSession(session.from.id, session);
   try {
     await sendToken(amount, destSLPaddr);
-    await withdrawCounter()
+    await withdrawCounter();
     return true;
   } catch (err) {
     console.log("Withdraw error at sendToken.js :\n", err);
@@ -99,7 +102,7 @@ const withdrawValidation = async (ctx, session, amount, destSLPaddr) => {
     const balances = await checkEscrowBalance();
     const tokenBalance = balances.tokens;
     const bchBalance = balances.bchBalance;
-    console.log('Escrow balance:\n',JSON.stringify(balances, null, 2));
+    console.log("Escrow balance:\n", JSON.stringify(balances, null, 2));
 
     if (tokenBalance < amount) {
       // Escrow wallet doesn't have enough HONK tokens to make transaction
@@ -125,6 +128,10 @@ const withdrawValidation = async (ctx, session, amount, destSLPaddr) => {
     if (withdrawResult) {
       return `Successfuly withdraw *${amount}* to SLPaddress:\n*${destSLPaddr}*`;
     } else {
+      // If withdraw transaction failed return tokens back
+      prevSession = await getSession(session.from.id);
+      prevSession.wallet.honkPoints += amount;
+      await saveSession(prevSession.from.id, prevSession);
       return `Sorry! We can't process this transaction. Please try later.`;
     }
   } else {
