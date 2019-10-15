@@ -15,7 +15,7 @@ module.exports.checkEscrowBalance = async () => {
   const session = await getSession(escrowId);
   const totalWithdraws = parseInt(session.totalWithdraws);
 
-  if (totalWithdraws % 10 == 0) {
+  if (totalWithdraws % 1 == 0) {
     // Update escrow balance
     const balances = await getBalance(process.env.ESCROW_WALLET_MNEMONIC);
     session.wallet.bchSatoshi = balances.bchBalance;
