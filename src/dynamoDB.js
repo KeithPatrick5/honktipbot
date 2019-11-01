@@ -1,5 +1,4 @@
 const DynamoDBSession = require("telegraf-session-dynamodb");
-//require("dotenv").config();
 
 const dynamoSession = new DynamoDBSession({
   dynamoDBConfig: {

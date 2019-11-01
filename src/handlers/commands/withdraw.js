@@ -1,7 +1,8 @@
 const { checkSLPAddress } = require("../../slp/checkSLPAddress");
 const { sendToken } = require("../../slp/send-token");
 const { getSession, saveSession } = require("../../dynamoDB");
-// const { getBalance } = require("../../slpdb/getBalance");
+const { dbLock } = require("../../dbLock/dbLock");
+const { toggleLock } = require("../../dbLock/toggleLock");
 const {
   checkEscrowBalance,
   withdrawCounter
@@ -19,6 +20,14 @@ module.exports.withdraw = async ctx => {
     const withdrawDelayTime = process.env.WITHDRAW_DELAY_TIME;
     const amount = +args[0];
     const destSLPaddr = args[1];
+
+    try {
+      await dbLock(ctx, ctx.from.id);
+    } catch (err) {
+      console.log("withdraw:: dbLock error:", err);
+      return `*${ctx.from.first_name}* sorry, try later.`;
+    }
+
     const session = await getSession(ctx.from.id);
     const wallet = session.wallet;
     let delta;
@@ -66,6 +75,8 @@ module.exports.withdraw = async ctx => {
         msg += `Wrong amount: ${args[0]}`;
       }
     }
+
+    toggleLock(ctx, ctx.from.id);
   } else {
     // Wrong command format! to withdraw tokens use follow format
     msg += `
@@ -108,7 +119,7 @@ const withdrawValidation = async (ctx, session, amount, destSLPaddr) => {
       // Escrow wallet doesn't have enough HONK tokens to make transaction
       let warnMsg =
         "ALERT! Escrow wallet doesn't have enough HONK tokens to make transaction";
-      warnMsg += `\nEscrow balance: ${tokenBalance}HONK; ${amount}`;
+      warnMsg += `\nEscrow balance: ${tokenBalance} HONK; Amount: ${amount}`;
       admin.alert(ctx, warnMsg);
       console.log(warnMsg);
       return `Sorry! We currently can't process this transaction. Please try later.`;

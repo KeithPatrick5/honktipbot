@@ -30,19 +30,21 @@ This bot powered with Telegraf library.
 - Bot-Session (primary key: *Session* [string])
 - Bot-checkDeposit (primary key: *address* [string])
 
-3. Create `.env` file with the environment variables listed in `.env.example`
+3. [AWS configure](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
 
-4. Install `NodeJS 10x` && `npm 6x`
+4. Create `.env` file with the environment variables listed in `.env.example`
 
-5. Run in the root folder 
+5. Install `NodeJS 10x` && `npm 6x`
+
+6. Run in the root folder 
     ```bash
     npm install
     ```
 
-6. Run
+7. Run
     ```bash
     npm start
     ```
 
 
-Creator: https://github.com/pytour
+Creator: [pytour](https://github.com/pytour)
