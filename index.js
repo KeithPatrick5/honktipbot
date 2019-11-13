@@ -20,6 +20,8 @@ bot.context.db = { lockedUsers: [] };
 //   await next();
 // });
 
+bot.catch(e => console.log(e));
+
 commandHandler(bot);
 
 // Text Handler must be last updates handler !
