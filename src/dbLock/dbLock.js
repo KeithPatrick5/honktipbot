@@ -10,7 +10,7 @@ const { toggleLock } = require("./toggleLock");
  */
 module.exports.dbLock = (ctx, userId) => {
   return new Promise((resolve, reject) => {
-    const timeout = 60000;
+    const timeout = 2000;
     let waitTime = 0;
 
     const loop = () => {
@@ -35,7 +35,10 @@ module.exports.dbLock = (ctx, userId) => {
       } else {
         console.log(`🗝 dbLock timeout`);
         console.table([{ userId: userId, message: ctx.message.text }]);
-        reject("dbLock timeout");
+        const randTime = Math.floor(Math.random() * 10) + 1; 
+        setTimeout(() => {
+          resolve("dbLock timeout, push through.");
+        }, randTime * 1000);
       }
     };
     loop();

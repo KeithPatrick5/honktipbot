@@ -18,7 +18,10 @@ module.exports.textHandler = async bot => {
 const privateChat = ctx => {
   ctx.reply(
     `Hello ${ctx.from.first_name} this is Honk tip bot.\nSee /help for more info.`,
-    Markup.keyboard([["/balance", "/help"], ["/deposit", "/withdraw"]])
+    Markup.keyboard([
+      ["/balance", "/help"],
+      ["/deposit", "/withdraw"]
+    ])
       .oneTime()
       .resize()
       .extra()
@@ -88,16 +91,20 @@ const tip = async (ctx, amount) => {
     await dbLock(ctx, fromUser.id);
     if (fromUser.id !== toUser.id) await dbLock(ctx, toUser.id);
   } catch (err) {
-    console.log('testHandler:: 🗝 dbLock error while trying make tip:', err);
-    return `*${fromUser.first_name}* sorry, try later.`
+    console.log("testHandler:: 🗝 dbLock error while trying make tip:", err);
+    return `*${fromUser.first_name}* sorry, try later.`;
   }
   await sessionInit(ctx);
 
   // Tip to bot deprecated
-  if (toUser.is_bot) return `*${fromUser.first_name}* you can't tip to bot`;
+  if (toUser.is_bot) {
+    if (fromUser.id !== toUser.id) toggleLock(ctx, toUser.id);
+    toggleLock(ctx, fromUser.id);
+    return `*${fromUser.first_name}* you can't tip to bot`;
+  }
 
   const transactionSuccess = await transactionInit(amount, ctx, toUser);
-  
+
   if (fromUser.id !== toUser.id) toggleLock(ctx, toUser.id);
   toggleLock(ctx, fromUser.id);
 
