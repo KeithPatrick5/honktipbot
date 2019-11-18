@@ -87,6 +87,7 @@ const tip = async (ctx, amount) => {
   const fromUser = ctx.from;
   const toUser = ctx.message.reply_to_message.from;
 
+  if (fromUser.id === toUser.id) return `*${fromUser.first_name}*  👏`;
   try {
     await dbLock(ctx, fromUser.id);
     if (fromUser.id !== toUser.id) await dbLock(ctx, toUser.id);
