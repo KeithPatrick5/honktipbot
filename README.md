@@ -27,7 +27,7 @@ This bot powered with Telegraf library.
     ```
 
 2. Create AWS DynamoDB tables: 
-- Bot-Session (primary key: *Session* [string])
+- Bot-Session (primary key: *SessionKey* [string])
 - Bot-checkDeposit (primary key: *address* [string])
 
 3. [AWS configure](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
@@ -40,7 +40,10 @@ This bot powered with Telegraf library.
     ```bash
     npm install
     ```
-
+8. Run a local instance of RabbitMQ
+    ```bash
+    sudo docker run -p 5672:5672 -d --hostname my-rabbit --name some-rabbit rabbitmq:3
+    ```
 7. Run
     ```bash
     npm start
