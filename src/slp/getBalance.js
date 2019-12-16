@@ -63,8 +63,14 @@ module.exports.getBalance = async mnemonicString => {
 
     // get token balances
     try {
-      const tokens = await SLP.Utils.balancesForAddress(slpAddress);
-      balances.tokens = tokens[0].balance;
+      let tokens = await SLP.Utils.balancesForAddress(slpAddress);
+      
+      // filter tokens to only include TOKENID, specified in environment
+      tokens = tokens.filter(t => {                                  
+        return t.tokenId == process.env.TOKENID;
+      });
+      
+      if(tokens[0]) balances.tokens = tokens[0].balance;
 
       console.log(JSON.stringify(tokens, null, 2));
     } catch (error) {
