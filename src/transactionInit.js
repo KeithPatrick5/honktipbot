@@ -54,7 +54,7 @@ const pushTransaction = async (amount, ctx, toUserSession) => {
     await saveSession(toUserSession.from.id, toUserSession);
 
     console.log(
-      `${ctx.from.first_name} tipped ${amount} HONK to ${toUserSession.from.first_name}`
+      `${ctx.from.first_name} sent ${amount} HONK to ${toUserSession.from.first_name}`
     );
     return true;
   } else {
