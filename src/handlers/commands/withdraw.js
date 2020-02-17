@@ -3,6 +3,7 @@ const { sendToken } = require("../../slp/send-token");
 const { getSession, saveSession } = require("../../dynamoDB");
 const { dbLock } = require("../../dbLock/dbLock");
 const { toggleLock } = require("../../dbLock/toggleLock");
+const { getDepositsTable } = require("../../depositsTable");
 const {
   checkEscrowBalance,
   withdrawCounter
@@ -62,9 +63,7 @@ module.exports.withdraw = async ctx => {
         msg += `Withdraw limit : ${withdrawLimit}`;
       } else if (wallet.honkPoints < amount) {
         //Not enough
-        msg += `Wrong amount ${args[0]}, you don't have enough tokens:${
-          wallet.honkPoints
-        }`;
+        msg += `Wrong amount ${args[0]}, you don't have enough tokens:${wallet.honkPoints}`;
       } else if (delta < withdrawDelayTime) {
         const left = (withdrawDelayTime - delta).toFixed(2);
         msg += `Sorry, you can't withdraw tokens during: ${left} min.\nPlease wait.`;
@@ -107,6 +106,15 @@ const withdrawTokens = async (session, amount, destSLPaddr) => {
 const withdrawValidation = async (ctx, session, amount, destSLPaddr) => {
   // Check SLP address
   const isSLPAddr = await checkSLPAddress(destSLPaddr);
+
+  // WITHDRAW TO BOT's USER DEPOSIT ADDRESS - DEPRECATED
+  // Need to check that destSLPaddr doesn't exists in AWS_DYNAMODB_DEPOSITS_TABLE
+  const isAddrExists = await getDepositsTable(destSLPaddr);
+
+  if (isAddrExists) {
+    console.log("Destination address exists in deposits table: ", destSLPaddr, JSON.stringify(isAddrExists.Item));
+    return `Sorry! We can't process this transaction.`;
+  }
 
   if (isSLPAddr) {
     // Need to check escrow balance

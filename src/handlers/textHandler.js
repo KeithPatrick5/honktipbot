@@ -111,7 +111,7 @@ const tip = async (ctx, amount) => {
 
   let msg = "";
   if (transactionSuccess) {
-    msg += `*${fromUser.first_name}* tipped ${amount.toLocaleString(
+    msg += `*${fromUser.first_name}* sent ${amount.toLocaleString(
       "en-US"
     )} 🤡*HONK*🤡 to *${toUser.first_name}*`;
   } else {
