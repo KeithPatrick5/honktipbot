@@ -2,7 +2,7 @@ const { toggleLock } = require("./toggleLock");
 
 /**
  * dbLock (database locks) set new lock for userId,
- * if userId have been locked previously, 
+ * if userId have been locked previously,
  * wait until userId will be unlocked or timeout error.
  * @param ctx - context
  * @param {String} userId - id
@@ -10,7 +10,8 @@ const { toggleLock } = require("./toggleLock");
  */
 module.exports.dbLock = (ctx, userId) => {
   return new Promise((resolve, reject) => {
-    const timeout = 2000;
+    const weight = +process.env.TIMEOUT;
+    const timeout = Math.floor(Math.random() * weight) + weight;
     let waitTime = 0;
 
     const loop = () => {
@@ -37,8 +38,9 @@ module.exports.dbLock = (ctx, userId) => {
         console.table([{ userId: userId, message: ctx.message.text }]);
         const randTime = Math.floor(Math.random() * 10) + 1; 
         setTimeout(() => {
+          console.log(`🗝 dbLock timeout, push through.`);
           resolve("dbLock timeout, push through.");
-        }, randTime * 1000);
+        }, randTime * weight);
       }
     };
     loop();
