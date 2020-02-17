@@ -5,9 +5,18 @@ const { textHandler } = require("./src/handlers/textHandler");
 const { commandHandler } = require("./src/handlers/commandHandler");
 const commandParts = require("telegraf-command-parts");
 const { notification } = require("./src/notification");
+const rateLimit = require("telegraf-ratelimit");
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
+const limitConfig = {
+    window: 3000,
+    limit: 1,
+    onLimitExceeded: (ctx, next) => {
+      console.log(`limit exceed for user: ${ctx.from.id}`);
+    }
+  };
+bot.use(rateLimit(limitConfig))
 bot.use(session());
 bot.use(commandParts());
 bot.context.db = { lockedUsers: [] };
