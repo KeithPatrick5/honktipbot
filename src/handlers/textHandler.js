@@ -3,6 +3,7 @@ const { sessionInit } = require("../sessionInit");
 const { transactionInit } = require("../transactionInit");
 const { dbLock } = require("../dbLock/dbLock");
 const { toggleLock } = require("../dbLock/toggleLock");
+const { isBanned } = require("../utils/isBanned")
 
 module.exports.textHandler = async bot => {
   bot.on("text", async ctx => {
@@ -87,6 +88,7 @@ const tip = async (ctx, amount) => {
   const fromUser = ctx.from;
   const toUser = ctx.message.reply_to_message.from;
 
+  if (isBanned(fromUser.id)) return;
   if (fromUser.id === toUser.id) return `*${fromUser.first_name}*  👏`;
   try {
     await dbLock(ctx, fromUser.id);
