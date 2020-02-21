@@ -8,7 +8,7 @@ module.exports.isBanned = id => {
   } catch (error) {
     bannedUsers = { ids: [] };
   }
-  console.log(bannedUsers);
+  //console.log(bannedUsers);
   
   return bannedUsers.ids.includes(+id)
 };

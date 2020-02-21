@@ -3,7 +3,7 @@ const { sessionInit } = require("../sessionInit");
 const { transactionInit } = require("../transactionInit");
 const { dbLock } = require("../dbLock/dbLock");
 const { toggleLock } = require("../dbLock/toggleLock");
-const { isBanned } = require("../utils/isBanned")
+const { isBanned } = require("../utils/isBanned");
 
 module.exports.textHandler = async bot => {
   bot.on("text", async ctx => {
@@ -55,12 +55,14 @@ const groupChat = async ctx => {
         // With comma "[number],[number] honk"
         let amount = text.replace(/,/g, "");
 
+        if (isBanned(ctx.from.id)) return;
         const tipResult = await tip(ctx, amount);
         ctx.replyWithMarkdown(tipResult);
       } else if (text.match(re)) {
         //"[number] honk"
         let amount = ctx.message.text.match(re)[0].split(" ")[0];
 
+        if (isBanned(ctx.from.id)) return;
         const tipResult = await tip(ctx, amount);
         ctx.replyWithMarkdown(tipResult);
       }
@@ -77,6 +79,7 @@ const groupChat = async ctx => {
         amount += matchArray.length * 10000;
       }
 
+      if (isBanned(ctx.from.id)) return;
       const tipResult = await tip(ctx, amount);
       ctx.replyWithMarkdown(tipResult);
     }
@@ -88,7 +91,6 @@ const tip = async (ctx, amount) => {
   const fromUser = ctx.from;
   const toUser = ctx.message.reply_to_message.from;
 
-  if (isBanned(fromUser.id)) return;
   if (fromUser.id === toUser.id) return `*${fromUser.first_name}*  👏`;
   try {
     await dbLock(ctx, fromUser.id);
