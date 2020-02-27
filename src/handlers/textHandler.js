@@ -42,6 +42,7 @@ const groupChat = async ctx => {
 
   if (ctx.message.reply_to_message) {
     let text = ctx.message.text;
+    const banMsg = '🤷‍♂️ Your account has been suspended!';
 
     if (parseFloat(text.match(reDot)) || parseFloat(text.match(reComma))) {
       text = text.includes(".") ? text.match(reDot)[0] : text.match(reComma)[0];
@@ -55,14 +56,14 @@ const groupChat = async ctx => {
         // With comma "[number],[number] honk"
         let amount = text.replace(/,/g, "");
 
-        if (isBanned(ctx.from.id)) return;
+        if (isBanned(ctx.from.id)) return ctx.reply(banMsg);
         const tipResult = await tip(ctx, amount);
         ctx.replyWithMarkdown(tipResult);
       } else if (text.match(re)) {
         //"[number] honk"
         let amount = ctx.message.text.match(re)[0].split(" ")[0];
 
-        if (isBanned(ctx.from.id)) return;
+        if (isBanned(ctx.from.id)) return ctx.reply(banMsg);
         const tipResult = await tip(ctx, amount);
         ctx.replyWithMarkdown(tipResult);
       }
@@ -79,7 +80,7 @@ const groupChat = async ctx => {
         amount += matchArray.length * 10000;
       }
 
-      if (isBanned(ctx.from.id)) return;
+      if (isBanned(ctx.from.id)) return ctx.reply(banMsg);
       const tipResult = await tip(ctx, amount);
       ctx.replyWithMarkdown(tipResult);
     }

@@ -28,7 +28,7 @@ module.exports.commandHandler = bot => {
   });
 
   bot.command("withdraw", async ctx => {
-    if (isBanned(ctx.from.id)) return;
+    if (isBanned(ctx.from.id)) return ctx.reply('🤷‍♂️ Your account has been suspended!');
     await isAllowed(ctx, withdraw);
   });
 };
