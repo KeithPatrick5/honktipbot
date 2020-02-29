@@ -13,7 +13,7 @@ const limitConfig = {
     window: 3000,
     limit: 1,
     onLimitExceeded: (ctx, next) => {
-      console.log(`limit exceed for user: ${ctx.from.id}`);
+      console.log(`limit exceed for user: ${ctx.from.id} ${ctx.message.text ? 'msg: ' + ctx.message.text : ''}`);
     }
   };
 bot.use(rateLimit(limitConfig))
