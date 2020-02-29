@@ -18,15 +18,21 @@ const limitConfig = {
     if (ctx.message && ctx.message.text) {
       if (ctx.chat.type == "private") {
         const commands = ["/balance", "/withdraw", "/deposit", "/help"];
-        if (commands.includes(ctx.message.text))
+        if (commands.includes(ctx.message.text)) {
           console.log(
             `limit exceed for user: ${ctx.from.id} msg: ${ctx.message.text}`
           );
+        } else {
+          next();
+        }
       } else if (ctx.chat.type == "group" || "supergroup") {
-        if (ctx.message.reply_to_message)
+        if (ctx.message.reply_to_message) {
           console.log(
             `limit exceed for user: ${ctx.from.id} msg: ${ctx.message.text}`
           );
+        } else {
+          next();
+        }
       } else {
         next();
       }
