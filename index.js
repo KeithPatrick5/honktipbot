@@ -14,11 +14,25 @@ const limitConfig = {
   window: 3000,
   limit: 1,
   onLimitExceeded: (ctx, next) => {
-    console.log(
-      `limit exceed for user: ${ctx.from.id} ${
-        ctx.message.text ? "msg: " + ctx.message.text : ""
-      }`
-    );
+    // check if message addressed to bot
+    if (ctx.message && ctx.message.text) {
+      if (ctx.chat.type == "private") {
+        const commands = ["/balance", "/withdraw", "/deposit", "/help"];
+        if (commands.includes(ctx.message.text))
+          console.log(
+            `limit exceed for user: ${ctx.from.id} msg: ${ctx.message.text}`
+          );
+      } else if (ctx.chat.type == "group" || "supergroup") {
+        if (ctx.message.reply_to_message)
+          console.log(
+            `limit exceed for user: ${ctx.from.id} msg: ${ctx.message.text}`
+          );
+      } else {
+        next();
+      }
+    } else {
+      next();
+    }
   }
 };
 
