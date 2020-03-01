@@ -58,10 +58,11 @@ const limitConfig = {
 
 bot.use(async (ctx, next) => {
   if (isBanned(ctx.from.id)) return;
+  rateLimit(limitConfig)
   await next();
 });
 
-bot.use(rateLimit(limitConfig));
+// bot.use(rateLimit(limitConfig));
 bot.use(session());
 bot.use(commandParts());
 bot.context.db = { lockedUsers: [] };
