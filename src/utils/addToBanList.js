@@ -11,5 +11,5 @@ module.exports.addToBanList = id => {
   }
   bannedUsers.ids.push(+id)
   
-  return fs.writeFileSync("./bannedUsers.json", JSON.stringify(bannedUsers, null. 2))
+  return fs.writeFileSync("./bannedUsers.json", JSON.stringify(bannedUsers, null, 2))
 };
