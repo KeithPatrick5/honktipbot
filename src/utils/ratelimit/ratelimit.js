@@ -44,9 +44,7 @@ module.exports = function limit(options) {
           }
           const hit = store.incr(key);
           if (hit <= 4) {
-            return console.log(
-              `limit exceed (hits:${hit}) in group chat for user: ${ctx.from.id} msg: ${ctx.message.text}`
-            );
+            return next()
           } else {
             // add to ban for 5 hits
             addToBanList(ctx.from.id);
