@@ -1,6 +1,7 @@
 const debug = require("debug")("telegraf:ratelimit");
 const MemoryStore = require("./memory-store.js");
 const { addToBanList } = require("../addToBanList");
+
 module.exports = function limit(options) {
   const config = Object.assign(
     {
@@ -49,7 +50,7 @@ module.exports = function limit(options) {
             // add to ban for 5 hits
             addToBanList(ctx.from.id);
             return console.log(
-              `USER BANNED! limit exceed (hits:${hit}) in group chat for user: ${ctx.from} msg: ${ctx.message.text}`
+              `USER BANNED! Reason: Limit exceed (hits:${hit}) in group chat for user: ${JSON.stringify(ctx.from,null,2)} msg: ${ctx.message.text}`
             );
           }
         } else {

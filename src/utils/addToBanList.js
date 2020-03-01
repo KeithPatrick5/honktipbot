@@ -1,7 +1,7 @@
 const fs = require("fs");
 
 module.exports.addToBanList = id => {
-  console.log(`Adding to ban list user: ${id}`);
+  console.log(`WARN! Adding to ban list user: ${id}`);
   let bannedUsers;
   try {
     bannedUsers = fs.readFileSync("./bannedUsers.json");
