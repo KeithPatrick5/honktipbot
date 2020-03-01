@@ -6,6 +6,7 @@ const { commandHandler } = require("./src/handlers/commandHandler");
 const commandParts = require("telegraf-command-parts");
 const { notification } = require("./src/notification");
 const rateLimit = require("telegraf-ratelimit");
+const memoryStore = require("telegraf-ratelimit/lib/memory-store");
 const { isBanned } = require("./src/utils/isBanned");
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
@@ -20,16 +21,29 @@ const limitConfig = {
         const commands = ["/balance", "/withdraw", "/deposit", "/help"];
         if (commands.includes(ctx.message.text)) {
           console.log(
-            `limit exceed for user: ${ctx.from.id} msg: ${ctx.message.text}`
+            `limit exceed in private chat for user: ${ctx.from.id} msg: ${ctx.message.text}`
           );
         } else {
           next();
         }
       } else if (ctx.chat.type == "group" || "supergroup") {
         if (ctx.message.reply_to_message) {
-          console.log(
-            `limit exceed for user: ${ctx.from.id} msg: ${ctx.message.text}`
-          );
+          const hitStore = new MemoryStore(2000);
+          const key = ctx.from && ctx.from.id;
+          if (!key) {
+            return next()
+          }
+          const hit = hitStore.incr(key);
+          if (hit <= 5) {
+            return console.log(
+              `limit exceed (hits:${hit}) in group chat for user: ${ctx.from.id} msg: ${ctx.message.text}`
+            );
+          } else {
+            // add to ban after 5 hits
+            return console.log(
+              `USER WILL BE BANNED! limit exceed (hits:${hit}) in group chat for user: ${ctx.from.id} msg: ${ctx.message.text}`
+            );
+          }
         } else {
           next();
         }
