@@ -9,7 +9,7 @@ module.exports.addToBanList = id => {
   } catch (error) {
     bannedUsers = { ids: [] };
   }
-  bannedUsers.ids.push(+id)
+  if (!bannedUsers.ids.includes(+id)) bannedUsers.ids.push(+id);
   
   return fs.writeFileSync("./bannedUsers.json", JSON.stringify(bannedUsers, null, 2))
 };
