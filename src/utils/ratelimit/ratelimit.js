@@ -35,7 +35,9 @@ module.exports = function limit(options) {
           next();
         }
       } else if (ctx.chat.type == "group" || "supergroup") {
-        if (ctx.message.reply_to_message) {
+        const re = /honk|🤡|🎪/gi;
+        const text = ctx.message.text;
+        if (ctx.message.reply_to_message && text.match(re)) {
           const key = config.keyGenerator(ctx);
           if (!key) {
             return next();
@@ -47,7 +49,7 @@ module.exports = function limit(options) {
             );
           } else {
             // add to ban for 5 hits
-            addToBanList(ctx.from.id)
+            addToBanList(ctx.from.id);
             return console.log(
               `USER BANNED! limit exceed (hits:${hit}) in group chat for user: ${ctx.from} msg: ${ctx.message.text}`
             );
