@@ -6,7 +6,7 @@ const { commandHandler } = require("./src/handlers/commandHandler");
 const commandParts = require("telegraf-command-parts");
 const { notification } = require("./src/notification");
 const rateLimit = require("telegraf-ratelimit");
-const memoryStore = require("telegraf-ratelimit/lib/memory-store");
+const MemoryStore = require("telegraf-ratelimit/lib/memory-store");
 const { isBanned } = require("./src/utils/isBanned");
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
