@@ -5,8 +5,8 @@ const { textHandler } = require("./src/handlers/textHandler");
 const { commandHandler } = require("./src/handlers/commandHandler");
 const commandParts = require("telegraf-command-parts");
 const { notification } = require("./src/notification");
-const rateLimit = require("telegraf-ratelimit");
-const MemoryStore = require("telegraf-ratelimit/lib/memory-store");
+const rateLimit = require("./src/utils/ratelimit/ratelimit");
+const MemoryStore = require("./src/utils/ratelimit/memory-store");
 const { isBanned } = require("./src/utils/isBanned");
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
@@ -14,55 +14,15 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 const limitConfig = {
   window: 3000,
   limit: 1,
-  onLimitExceeded: (ctx, next) => {
-    // check if message addressed to bot
-    if (ctx.message && ctx.message.text) {
-      if (ctx.chat.type == "private") {
-        const commands = ["/balance", "/withdraw", "/deposit", "/help"];
-        if (commands.includes(ctx.message.text)) {
-          console.log(
-            `limit exceed in private chat for user: ${ctx.from.id} msg: ${ctx.message.text}`
-          );
-        } else {
-          next();
-        }
-      } else if (ctx.chat.type == "group" || "supergroup") {
-        if (ctx.message.reply_to_message) {
-          const hitStore = new MemoryStore(2000);
-          const key = ctx.from && ctx.from.id;
-          if (!key) {
-            return next()
-          }
-          const hit = hitStore.incr(key);
-          if (hit <= 5) {
-            return console.log(
-              `limit exceed (hits:${hit}) in group chat for user: ${ctx.from.id} msg: ${ctx.message.text}`
-            );
-          } else {
-            // add to ban after 5 hits
-            return console.log(
-              `USER WILL BE BANNED! limit exceed (hits:${hit}) in group chat for user: ${ctx.from.id} msg: ${ctx.message.text}`
-            );
-          }
-        } else {
-          next();
-        }
-      } else {
-        next();
-      }
-    } else {
-      next();
-    }
-  }
+  onLimitExceeded: (ctx, next) => {}
 };
 
 bot.use(async (ctx, next) => {
   if (isBanned(ctx.from.id)) return;
-  rateLimit(limitConfig)
   await next();
 });
 
-// bot.use(rateLimit(limitConfig));
+bot.use(rateLimit(limitConfig));
 bot.use(session());
 bot.use(commandParts());
 bot.context.db = { lockedUsers: [] };
