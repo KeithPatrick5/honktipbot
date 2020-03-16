@@ -67,7 +67,7 @@ Type:
 /withdraw - withdrawing *HONK*  
 /balance - get your *HONK* balance
 
-If you need furhter assistance, please contact @honktoken chat room.
+If you need further assistance, please contact @honktoken chat room.
 `;
   ctx.replyWithMarkdown(
     helpMsg,
