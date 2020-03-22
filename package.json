@@ -15,7 +15,7 @@
     "axios": "^0.19.0",
     "btoa": "^1.2.1",
     "dotenv": "^7.0.0",
-    "slp-sdk": "^4.11.0",
+    "slp-sdk": "^4.15.0",
     "telegraf": "^3.28.0",
     "telegraf-command-parts": "^1.0.3",
     "telegraf-ratelimit": "^2.0.0",
