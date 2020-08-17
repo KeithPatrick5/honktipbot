@@ -6,7 +6,7 @@ This is a telegram bot that allow you tip other users in telegram with a [HONK](
 Add [@Honktipbot](https://t.me/honktipbot) to your group.
 Then make your tip to other user by replying on their messages with "[NUMBER] honk" (e.g. "10 honk").
 
-Users can deposit and withdraw their tokens.
+Users can deposit and withdraw their HONK tokens.
 You could also setup notification for new deposits with separate service [checkDeposits](https://github.com/KeithPatrick5/checkDeposits).
 
 This bot powered with Telegraf library.
