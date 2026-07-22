@@ -1,0 +1,15 @@
+{
+  "tokens": [
+    {
+      "symbol": "DEMO",
+      "name": "Local demonstration token",
+      "category": "0000000000000000000000000000000000000000000000000000000000000000",
+      "decimals": 0,
+      "minimumTip": "1",
+      "minimumDeposit": "1",
+      "minimumWithdrawal": "1",
+      "enabled": true,
+      "emoji": "🎪"
+    }
+  ]
+}

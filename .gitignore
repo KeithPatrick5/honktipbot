@@ -1,6 +1,8 @@
 .env
-
-node_modules
-package-lock.json
-
-bannedUsers.json
+node_modules/
+data/
+secrets/
+*.mnemonic
+coverage/
+*.log
+.DS_Store
